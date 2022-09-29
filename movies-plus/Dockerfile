@@ -7,14 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["movies-plus/movies-plus.csproj", "movies-plus/"]
-RUN dotnet restore "movies-plus/movies-plus.csproj"
+COPY ["movies-plus.csproj", "."]
+RUN dotnet restore "./movies-plus.csproj"
 COPY . .
-WORKDIR "/src/movies-plus"
+WORKDIR "/src/."
 RUN dotnet build "movies-plus.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "movies-plus.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+RUN dotnet tool install --global dotnet-ef --version 6.0
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 FROM base AS final
 WORKDIR /app
