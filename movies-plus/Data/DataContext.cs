@@ -1,14 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using System;
-using webApi.Models;
+using movies_plus.Models;
 
-namespace webApi.Data
+namespace movies_plus.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
+        protected readonly IConfiguration Configuration;
 
+        public DataContext(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            // connect to mysql with connection string from app settings
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
         public DbSet<Movies> Movies { get; set; }
         

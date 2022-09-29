@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using webApi.Data;
-using webApi.Models;
+using movies_plus.Data;
+using movies_plus.Models;
 
 namespace movies_plus.Controllers
 {   

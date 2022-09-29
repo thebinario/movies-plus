@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using webApi.Data;
+using movies_plus.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +13,9 @@ builder.Services.AddSwaggerGen();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<DataContext>
-(options => options.UseSqlServer
-    ("Data Source=DESKTOP-HVNTI80\\DESENVOLVIMENTO;Initial Catalog=CRUD_MVC_SQL_CANAL_DEV;Integrated Security=False;User ID=sa;Password=1234;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False"));
+// Add contexto
+builder.Services.AddDbContext<DataContext>();
+
 
 var app = builder.Build();
 
