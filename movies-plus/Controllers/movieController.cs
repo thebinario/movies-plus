@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using movies_plus.Data;
 using movies_plus.Models;
+using System.Reflection;
+using System;
 
 namespace movies_plus.Controllers
 {   
@@ -25,6 +27,20 @@ namespace movies_plus.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
             return movies;
+        }
+
+        [HttpGet]
+        [Route("search/{name}")]
+        public async Task<ActionResult<IEnumerable<Movies>>> Search([FromServices] DataContext context, string name)
+        {
+            IQueryable<Movies> query = context.Movies;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(e => e.Name.Contains(name));
+            }
+
+            return await query.ToListAsync();
         }
 
         [HttpPost]
@@ -61,9 +77,8 @@ namespace movies_plus.Controllers
         [Route("{id:int}")]
         public async Task Delete([FromServices] DataContext context, int id)
         {
-            await context.Movies
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+            context.Remove(context.Movies.Single(a => a.Id == 1));
+            context.SaveChanges();
         }
         
     }
